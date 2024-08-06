@@ -416,3 +416,4 @@ dotnet_naming_rule.parameters_rule.style                = camel_case_style
 dotnet_naming_rule.parameters_rule.severity             = warning
 
 dotnet_diagnostic.CA1848.severity = none
+dotnet_diagnostic.CA2201.severity = none

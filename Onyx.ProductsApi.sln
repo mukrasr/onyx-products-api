@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4C763D5B-6B10-48C8-A003-FEEC0F2B4B6B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{588DBBEF-1B95-4B0E-A486-6B1E20B191ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onyx.ProductsApi.IntegrationTests", "src\Onyx.ProductsApi.IntegrationTests\Onyx.ProductsApi.IntegrationTests.csproj", "{77955644-A0A2-4A32-92A7-8144C21AE6A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onyx.ProductsApi.Contracts", "src\Onyx.ProductsApi.Contracts\Onyx.ProductsApi.Contracts.csproj", "{B31D7935-40A5-4A06-96D2-C70A8D2727E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onyx.ProductsApi", "src\Onyx.ProductsApi\Onyx.ProductsApi.csproj", "{CD03ECAE-10C9-41E5-B881-893E3407E9D6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onyx.ProductsApi", "src\Onyx.ProductsApi\Onyx.ProductsApi.csproj", "{C3AA4075-DA6D-4FBC-BC1B-85729F755B8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onyx.ProductsApi.UnitTests", "src\Onyx.ProductsApi.UnitTests\Onyx.ProductsApi.UnitTests.csproj", "{C76D3200-8A1C-4EF7-8D28-51CA08D2D3DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onyx.ProductsApi.Tests", "src\Onyx.ProductsApi.Tests\Onyx.ProductsApi.Tests.csproj", "{D914DB6F-DB51-4F78-BE1F-63A270C7BCE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,22 +20,22 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{77955644-A0A2-4A32-92A7-8144C21AE6A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77955644-A0A2-4A32-92A7-8144C21AE6A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77955644-A0A2-4A32-92A7-8144C21AE6A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77955644-A0A2-4A32-92A7-8144C21AE6A2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD03ECAE-10C9-41E5-B881-893E3407E9D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD03ECAE-10C9-41E5-B881-893E3407E9D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD03ECAE-10C9-41E5-B881-893E3407E9D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD03ECAE-10C9-41E5-B881-893E3407E9D6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C76D3200-8A1C-4EF7-8D28-51CA08D2D3DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C76D3200-8A1C-4EF7-8D28-51CA08D2D3DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C76D3200-8A1C-4EF7-8D28-51CA08D2D3DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C76D3200-8A1C-4EF7-8D28-51CA08D2D3DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B31D7935-40A5-4A06-96D2-C70A8D2727E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B31D7935-40A5-4A06-96D2-C70A8D2727E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B31D7935-40A5-4A06-96D2-C70A8D2727E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B31D7935-40A5-4A06-96D2-C70A8D2727E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3AA4075-DA6D-4FBC-BC1B-85729F755B8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3AA4075-DA6D-4FBC-BC1B-85729F755B8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3AA4075-DA6D-4FBC-BC1B-85729F755B8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3AA4075-DA6D-4FBC-BC1B-85729F755B8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D914DB6F-DB51-4F78-BE1F-63A270C7BCE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D914DB6F-DB51-4F78-BE1F-63A270C7BCE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D914DB6F-DB51-4F78-BE1F-63A270C7BCE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D914DB6F-DB51-4F78-BE1F-63A270C7BCE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{77955644-A0A2-4A32-92A7-8144C21AE6A2} = {4C763D5B-6B10-48C8-A003-FEEC0F2B4B6B}
-		{CD03ECAE-10C9-41E5-B881-893E3407E9D6} = {4C763D5B-6B10-48C8-A003-FEEC0F2B4B6B}
-		{C76D3200-8A1C-4EF7-8D28-51CA08D2D3DF} = {4C763D5B-6B10-48C8-A003-FEEC0F2B4B6B}
+		{B31D7935-40A5-4A06-96D2-C70A8D2727E9} = {588DBBEF-1B95-4B0E-A486-6B1E20B191ED}
+		{C3AA4075-DA6D-4FBC-BC1B-85729F755B8A} = {588DBBEF-1B95-4B0E-A486-6B1E20B191ED}
+		{D914DB6F-DB51-4F78-BE1F-63A270C7BCE9} = {588DBBEF-1B95-4B0E-A486-6B1E20B191ED}
 	EndGlobalSection
 EndGlobal

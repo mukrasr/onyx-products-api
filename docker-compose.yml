@@ -1,0 +1,31 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: final
+    ports:
+      - 5271:5271
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5271
+    healthcheck:
+      test: curl --fail http://localhost:5271 || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ~/.microsoft/:/root/.microsoft
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: testrunner
+    environment:
+      API_PATH: http://api:5271
+      JWT_TOKEN: ${JWT_TOKEN}
+    depends_on:
+      api:
+        condition: service_healthy
+    volumes:
+      - ~/.microsoft/:/root/.microsoft
