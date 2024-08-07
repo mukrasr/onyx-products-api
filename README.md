@@ -7,6 +7,7 @@ The tests that validate this api can be run either via docker compose or directl
 This is the recommended method. You first need to create a `.env` file using the `.env.sample` and then simply run as follows:
 
 ```bash
+cp .env.sample .env
 docker compose up --build tests
 ```
 
