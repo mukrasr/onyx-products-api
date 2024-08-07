@@ -2,20 +2,20 @@ using Onyx.ProductsApi.Contracts;
 
 namespace Onyx.ProductsApi.Services;
 
-public class ProductsService : IProductsService
+public class ProductsService(ILogger<ProductsService> logger) : IProductsService
 {
-    private static readonly HashSet<Product> Products = [];
+    private static readonly Dictionary<Colours, Product> Products = [];
 
-    public Task<Product> AddProductAsync(ProductCreate product)
+    public Task AddProductAsync(Product product)
     {
-        var item = new Product(Products.Count + 1, product.Name, product.Colour);
-
-        if (!Products.Add(item))
+        if (Products.ContainsKey(product.Colour))
         {
-            throw new Exception($"Could not add item: {product}");
+            logger.LogError("Product already exists in system: {Product}", product);
+            return Task.CompletedTask;
         }
 
-        return Task.FromResult(item);
+        Products.Add(product.Colour, product);
+        return Task.CompletedTask;
     }
 
     public Task<IEnumerable<Product>> GetProductsAsync(ProductQuery query)
@@ -24,9 +24,25 @@ public class ProductsService : IProductsService
 
         if (query.Colours != null)
         {
-            result = result.Where(x => query.Colours.Contains(x.Colour));
+            result = result.Where(x => query.Colours.Contains(x.Key));
         }
 
-        return Task.FromResult(result);
+        return Task.FromResult(result.Select(x => x.Value));
+    }
+
+    public Task DeleteProductAsync(Colours colour)
+    {
+        if (!Products.ContainsKey(colour))
+        {
+            logger.LogError("Product with {Colour} not found", colour);
+            return Task.CompletedTask;
+        }
+
+        if (!Products.Remove(colour))
+        {
+            throw new Exception($"Could not remove product with colour: {colour}");
+        }
+
+        return Task.CompletedTask;
     }
 }

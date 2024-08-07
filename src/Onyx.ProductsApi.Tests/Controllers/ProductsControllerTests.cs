@@ -11,6 +11,12 @@ public class ProductsControllerTests : IDisposable
     private readonly string? _basePath = Environment.GetEnvironmentVariable("API_PATH");
     private readonly HttpClient _client = new();
     private readonly string _path;
+    private readonly IEnumerable<Product> _defaultProducts =
+    [
+        new(Colours.Black, Guid.NewGuid().ToString()),
+        new(Colours.Blue, Guid.NewGuid().ToString()),
+        new(Colours.Green, Guid.NewGuid().ToString())
+    ];
 
     public ProductsControllerTests()
     {
@@ -22,13 +28,14 @@ public class ProductsControllerTests : IDisposable
     public async Task GetProducts_ShouldReturnAllProducts()
     {
         // Arrange
-        var products = await CreateProducts();
+        var products = await CreateDefaultProducts();
 
         // Act
         var resp = await _client.GetFromJsonAsync<IEnumerable<Product>>(_path);
 
         // Assert
         resp.Should().Contain(products);
+        await DeleteProducts(products);
     }
 
     [Theory]
@@ -38,13 +45,14 @@ public class ProductsControllerTests : IDisposable
     public async Task GetProducts_ShouldReturn_ProductsWithColour(Colours colour)
     {
         // Arrange
-        await CreateProducts();
+        var products = await CreateDefaultProducts();
 
         // Act
         var resp = await _client.GetFromJsonAsync<IEnumerable<Product>>($"{_path}?Colours={colour}");
 
         // Assert
         resp.Should().AllSatisfy(x => x.Colour.Should().Be(colour));
+        await DeleteProducts(products);
     }
 
     [Fact]
@@ -77,16 +85,31 @@ public class ProductsControllerTests : IDisposable
     public async Task AddProduct_ShouldCorrectlyAddAProduct()
     {
         // Arrange
-        var product = new ProductCreate(Guid.NewGuid().ToString(), Colours.Green);
+        var product = new Product(Colours.Green, Guid.NewGuid().ToString());
 
         // Act
-        var response = await _client.PostAsJsonAsync(_path, product);
-        var expected = await response.Content.ReadFromJsonAsync<Product>();
+        await _client.PostAsJsonAsync(_path, product);
 
         // Assert
         var actual = await _client.GetFromJsonAsync<IEnumerable<Product>>($"{_path}?Colours={product.Colour}");
 
-        actual.Should().Contain([expected!]);
+        actual.Should().Contain([product]);
+        await DeleteProducts([product]);
+    }
+
+    [Fact]
+    public async Task AddProduct_ShouldReturn409_WhenDuplicateProductExists()
+    {
+        // Arrange
+        var product = new Product(Colours.Green, Guid.NewGuid().ToString());
+        await _client.PostAsJsonAsync(_path, product);
+
+        // Act
+        var resp = await _client.PostAsJsonAsync(_path, new Product(Colours.Green, Guid.NewGuid().ToString()));
+
+        // Assert
+        resp.StatusCode.Should().Be(HttpStatusCode.Conflict);
+        await DeleteProducts([product]);
     }
 
     [Fact]
@@ -96,29 +119,66 @@ public class ProductsControllerTests : IDisposable
         var client = new HttpClient();
 
         // Act
-        var resp = await client.PostAsJsonAsync(_path, new ProductCreate("Name", Colours.Black));
+        var resp = await client.PostAsJsonAsync(_path, new Product(Colours.Black, "Name"));
 
         // Assert
         resp.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
-    private async Task<List<Product>> CreateProducts()
+    [Fact]
+    public async Task DeleteProduct_ShouldCorrectlyDeleteAProduct()
     {
-        var result = new List<Product>();
-        IEnumerable<ProductCreate> products = [
-            new(Guid.NewGuid().ToString(), Colours.Black),
-            new(Guid.NewGuid().ToString(), Colours.Blue),
-            new(Guid.NewGuid().ToString(), Colours.Green)
-        ];
+        // Arrange
+        var product = new Product(Colours.Green, Guid.NewGuid().ToString());
 
-        foreach (var product in products)
+        // Act
+        await _client.DeleteAsync($"{_path}/{product.Colour}");
+
+        // Assert
+        var actual = await _client.GetFromJsonAsync<IEnumerable<Product>>($"{_path}?Colours={product.Colour}");
+
+        actual.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task DeleteProduct_ShouldReturn404_IfProductIsNotFound()
+    {
+        // Act
+        var resp = await _client.DeleteAsync($"{_path}/{Colours.Black}");
+
+        // Assert
+        resp.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task DeleteProduct_ShouldReturn401_NoAuthenticationIsProvided()
+    {
+        // Arrange
+        var client = new HttpClient();
+
+        // Act
+        var resp = await client.DeleteAsync($"{_path}/{Colours.Black}");
+
+        // Assert
+        resp.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    private async Task<IEnumerable<Product>> CreateDefaultProducts()
+    {
+        foreach (var product in _defaultProducts)
         {
-            var resp = await _client.PostAsJsonAsync(_path, product);
-            var item = await resp.Content.ReadFromJsonAsync<Product>();
-            result.Add(item!);
+            await _client.PostAsJsonAsync(_path, product);
         }
 
-        return result;
+        return _defaultProducts;
+    }
+
+    private async Task DeleteProducts(IEnumerable<Product> products)
+    {
+        foreach (var product in products)
+        {
+            await _client.DeleteAsync($"{_path}/{product.Colour}");
+        }
     }
 
     public void Dispose()
