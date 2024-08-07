@@ -7,13 +7,15 @@ namespace Onyx.ProductsApi.Tests.Controllers;
 
 public class ProductsControllerTests : IDisposable
 {
+    private readonly string? _jwtToken = Environment.GetEnvironmentVariable("JWT_TOKEN");
+    private readonly string? _basePath = Environment.GetEnvironmentVariable("API_PATH");
     private readonly HttpClient _client = new();
     private readonly string _path;
 
     public ProductsControllerTests()
     {
-        _client.DefaultRequestHeaders.Authorization = new("Bearer", Environment.GetEnvironmentVariable("JWT_TOKEN"));
-        _path = $"{Environment.GetEnvironmentVariable("API_PATH")}/api/products";
+        _client.DefaultRequestHeaders.Authorization = new("Bearer", _jwtToken);
+        _path = $"{_basePath}/api/products";
     }
 
     [Fact]
